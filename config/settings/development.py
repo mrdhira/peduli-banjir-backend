@@ -5,12 +5,14 @@ import os
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", True)
 
+ALLOWED_HOSTS = ["*"]
+
 # Cors
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOWED_ORIGINS = env.list(
-    "DJANG_CORS_ALLOWED_ORIGINS",
-    default=[],  # Frontend url
-)
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOWED_ORIGINS = env.list(
+#     "DJANG_CORS_ALLOWED_ORIGINS",
+#     default=[],  # Frontend url
+# )
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

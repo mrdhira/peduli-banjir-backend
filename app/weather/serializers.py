@@ -35,7 +35,20 @@ class WeatherCurrentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WeatherCurrent
-        fields = "__all__"
+        fields = (
+            "location_state",
+            "location_city",
+            "location_address",
+            "weather_main",
+            "weather_description",
+            "weather_icon",
+            "temp",
+            "temp_min",
+            "temp_max",
+            "feels_like",
+            "humidity",
+            "datetime",
+        )
 
 
 class WeatherForecastSerializer(serializers.ModelSerializer):

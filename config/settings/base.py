@@ -31,9 +31,10 @@ ENV = env.str("ENV", "development")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
-ALLOWED_HOSTS = env.list(
-    "DJANGO_ALLOWED_HOST", default=["localhost", "0.0.0.0", "127.0.0.1"]
-)
+# ALLOWED_HOSTS = env.list(
+#     "DJANGO_ALLOWED_HOST", default=["localhost", "0.0.0.0", "127.0.0.1"]
+# )
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = "user.User"
 ADMIN_URL = env.str("DJANGO_ADMIN_URL", "admin")
@@ -207,4 +208,5 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 CACHE_TTL = int(env("REDIS_CACHE_TTL"))
 
+OPEN_WEATHER_APP_ID = env("OPEN_WEATHER_APP_ID")
 GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")

@@ -43,32 +43,32 @@ class LocationManager(Manager):
         city_district = geolocation.raw["address"].get("city_district", "")
         village = geolocation.raw["address"].get("village", "")
         residential = geolocation.raw["address"].get("residential", "")
-        postal_code = geolocation.raw["adress"].get("postcode", "")
+        postal_code = geolocation.raw["address"].get("postcode", "")
         address = geolocation.raw.get("display_name", "")
 
         location = self.filter(
-            country_code,
-            country,
-            state,
-            city,
-            city_district,
-            village,
-            residential,
-            postal_code,
-            address,
+            country_code=country_code,
+            country=country,
+            state=state,
+            city=city,
+            city_district=city_district,
+            village=village,
+            residential=residential,
+            postal_code=postal_code,
+            address=address,
         ).first()
 
         if not location:
             with transaction.atomic():
                 location = self.create(
-                    country_code,
-                    country,
-                    state,
-                    city,
-                    city_district,
-                    village,
-                    residential,
-                    address,
+                    country_code=country_code,
+                    country=country,
+                    state=state,
+                    city=city,
+                    city_district=city_district,
+                    village=village,
+                    residential=residential,
+                    address=address,
                 )
 
         return location

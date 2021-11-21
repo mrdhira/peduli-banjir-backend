@@ -34,22 +34,21 @@ class WeatherCurrentManager(Manager):
         weather_data = curr_resp.json()
         curr_resp.close()
 
-        logger.info(
-            "response from open weather api for get current weather", weather_data
-        )
+        logger.info("response from open weather api for get current weather")
+        print(weather_data)
 
         # Weather Desc
         weather_desc_openweather_id = weather_data["weather"][0]["id"]
-        weather_desc_main = weather_data["weather"][0]["id"]
-        weather_desc_description = weather_data["weather"][0]["id"]
-        weather_desc_icon = weather_data["weather"][0]["id"]
+        weather_desc_main = weather_data["weather"][0]["main"]
+        weather_desc_description = weather_data["weather"][0]["description"]
+        weather_desc_icon = weather_data["weather"][0]["icon"]
 
         # Weather Current
         timezone = weather_data.get("timezone", 0)
         dt = weather_data.get("dt", 0)
         sunrise = weather_data["sys"].get("sunrise", 0)
         sunset = weather_data["sys"].get("sunset", 0)
-        temp = weather_data.get("", 0.0)
+        temp = weather_data["main"].get("temp", 0.0)
         temp_min = weather_data["main"].get("temp_min", 0.0)
         temp_max = weather_data["main"].get("temp_max", 0.0)
         feels_like = weather_data["main"].get("feels_like", 0.0)
@@ -60,8 +59,13 @@ class WeatherCurrentManager(Manager):
         wind_speed = weather_data["wind"].get("speed", 0.0)
         wind_deg = weather_data["wind"].get("deg", 0)
         wind_gust = weather_data["wind"].get("gust", 0.0)
-        rain_1h = weather_data["rain"].get("1h", 0.0)
-        rain_3h = weather_data["rain"].get("3h", 0.0)
+        rain = weather_data.get("rain", None)
+        if rain:
+            rain_1h = weather_data["rain"].get("1h", 0.0)
+            rain_3h = weather_data["rain"].get("3h", 0.0)
+        else:
+            rain_1h = None
+            rain_3h = None
         sea_level = weather_data["main"].get("sea_level", 0)
         ground_level = weather_data["main"].get("grnd_level", 0)
 
@@ -85,27 +89,27 @@ class WeatherCurrentManager(Manager):
 
             # Insert to database
             weather_current = self.create(
-                location,
-                weather_desc,
-                timezone,
-                dt,
-                sunrise,
-                sunset,
-                temp,
-                temp_min,
-                temp_max,
-                feels_like,
-                pressure,
-                humidity,
-                clouds,
-                visibility,
-                wind_speed,
-                wind_deg,
-                wind_gust,
-                rain_1h,
-                rain_3h,
-                sea_level,
-                ground_level,
+                location=location,
+                weather_desc=weather_desc,
+                timezone=timezone,
+                dt=dt,
+                sunrise=sunrise,
+                sunset=sunset,
+                temp=temp,
+                temp_min=temp_min,
+                temp_max=temp_max,
+                feels_like=feels_like,
+                pressure=pressure,
+                humidity=humidity,
+                clouds=clouds,
+                visibility=visibility,
+                wind_speed=wind_speed,
+                wind_deg=wind_deg,
+                wind_gust=wind_gust,
+                rain_1h=rain_1h,
+                rain_3h=rain_3h,
+                sea_level=sea_level,
+                ground_level=ground_level,
             )
 
             return weather_current

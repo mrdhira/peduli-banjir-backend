@@ -26,7 +26,9 @@ def google_verify_oauth2(access_token):
             GOOGLE_CLIENT_ID,
         )
 
-        logger.info("result from google oauth2 token", result=result)
+        logger.info("result from google oauth2 token")
+        print(result)
+
         serializer = GoogleOauth2Serializer(data=result)
 
         if serializer.is_valid():
@@ -55,7 +57,8 @@ class UserCustomManager(UserManager):
     def get_profile(self, fields):
         user = fields.get("user")
 
-        logger.info("inside user authentication", user)
+        logger.info("inside user authentication")
+        print(user)
 
         return user
 
