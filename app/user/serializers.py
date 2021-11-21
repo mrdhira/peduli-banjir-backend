@@ -66,7 +66,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     display_picture = serializers.SerializerMethodField()
 
     def get_display_picture(self, obj):
-        return obj.display_picture.url
+        return obj.get_display_picture()
 
     class Meta:
         model = User
