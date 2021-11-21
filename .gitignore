@@ -1,0 +1,8 @@
+# Virtual ENV
+venv/
+
+# Credentials
+.env
+
+# Log
+*.log

@@ -1,0 +1,19 @@
+# Django
+django
+django-environ
+django-redis
+djangorestframework
+djangorestframework-jwt
+django-cors-headers
+django-nested-admin
+
+#
+psycopg2
+hiredis
+
+#
+google-auth
+certifi
+geopy
+requests
+Pillow
