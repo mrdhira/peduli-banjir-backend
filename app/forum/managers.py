@@ -45,14 +45,12 @@ class ForumPostManager(Manager):
             self.select_related("user_creator")
             .prefetch_related(
                 "forum_post_like",
-                "forum_post_picture",
-                "forum_thread",
-                "forum_thread__sub_thread",
+                "thread",
+                "thread__sub_thread",
             )
             .filter(
                 id=post_id,
                 status=Status.ACTIVE,
-                forum_post_picture__status=Status.ACTIVE,
             )
             .first()
         )
@@ -103,16 +101,21 @@ class ForumPostManager(Manager):
             if not post:
                 raise ObjectDoesNotExist
 
-            post_like = ForumPostLike.objects.filter(user, post).first()
-
+            post_like = ForumPostLike.objects.filter(
+                user=user,
+                post=post,
+            ).first()
             if not post_like:
-                post_like = self.create(user, post)
+                post_like = ForumPostLike.objects.create(
+                    user=user,
+                    post=post,
+                )
                 self.incr_like(post.id)
             else:
                 post_like.delete()
                 self.decr_like(post.id)
 
-        return
+        return post_like
 
     def incr_like(self, post_id):
         return self.filter(id=post_id).update(total_like=F("total_like") + 1)
@@ -167,27 +170,33 @@ class ForumThreadManager(Manager):
 
         return thread
 
-    def action_like(self, fields, post_id):
+    def action_like(self, fields, post_id, thread_id):
         user = fields.get("user")
 
-        from .models import ForumPostLike
+        from .models import ForumThreadLike
 
         with transaction.atomic():
-            post = self.filter(id=post_id).first()
+            thread = self.filter(id=thread_id).first()
 
-            if not post:
+            if not thread:
                 raise ObjectDoesNotExist
 
-            post_like = ForumPostLike.objects.filter(user, post).first()
+            thread_like = ForumThreadLike.objects.filter(
+                user=user,
+                thread=thread,
+            ).first()
 
-            if not post_like:
-                post_like = self.create(user, post)
-                self.incr_like(post.id)
+            if not thread_like:
+                thread_like = ForumThreadLike.objects.create(
+                    user=user,
+                    thread=thread,
+                )
+                self.incr_like(thread.id)
             else:
-                post_like.delete()
-                self.decr_like(post.id)
+                thread_like.delete()
+                self.decr_like(thread.id)
 
-        return
+        return thread_like
 
     def incr_like(self, thread_id):
         return self.filter(id=thread_id).update(total_like=F("total_like") + 1)

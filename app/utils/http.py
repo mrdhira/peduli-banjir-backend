@@ -272,7 +272,7 @@ def generic_put(
                 "error": format_exception_string(error),
                 "data": {},
             },
-            status=status.HTTP_500_INTERNAL_SERVER_ERRORs,
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
     result_payload = response_serializer(

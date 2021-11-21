@@ -1,6 +1,6 @@
 from rest_framework import permissions
 from rest_framework.views import APIView
-from app.utils.http import generic_get, generic_post
+from app.utils.http import generic_get, generic_post, generic_put
 from .models import ForumPost, ForumThread
 from .serializers import (
     PassSerializer,
@@ -10,6 +10,8 @@ from .serializers import (
     ThreadSerializer,
     CreateForumPostSerializer,
     CreateForumThreadSerializer,
+    ForumPostLikeSerializer,
+    ForumThreadLikeSerializer,
 )
 
 
@@ -66,14 +68,14 @@ class ForumPostDetailView(APIView):
 class ForumPostLikeView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    # POST Like / Unlike Forum Post
-    def post(self, request, post_id):
-        return generic_post(
+    # PUT Like / Unlike Forum Post
+    def put(self, request, post_id):
+        return generic_put(
             request=request,
-            create_method=ForumPost.objects.action_like,
-            empty_body=True,
+            update_method=ForumPost.objects.action_like,
             request_serializer=PassSerializer,
-            response_serializer=PassSerializer,
+            response_serializer=ForumPostLikeSerializer,
+            object_id=post_id,
             context={
                 "post_id": post_id,
             },
@@ -85,10 +87,10 @@ class ForumPostThreadView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     # POST Create Forum Thread / Comment
-    def put(self, request, post_id):
+    def post(self, request, post_id):
         return generic_post(
             request=request,
-            create_method=ForumThread.objects.create_post,
+            create_method=ForumThread.objects.create_thread,
             request_serializer=CreateForumThreadSerializer,
             response_serializer=ThreadSerializer,
             context={
@@ -101,16 +103,17 @@ class ForumPostThreadView(APIView):
 class ForumThreadLikeView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    # POST Like / Unlike Forum Thread
-    def post(self, request, post_id):
-        return generic_post(
+    # PUT Like / Unlike Forum Thread
+    def put(self, request, post_id, thread_id):
+        return generic_put(
             request=request,
-            create_method=ForumThread.objects.action_like,
-            empty_body=True,
+            update_method=ForumThread.objects.action_like,
             request_serializer=PassSerializer,
-            response_serializer=PassSerializer,
+            response_serializer=ForumThreadLikeSerializer,
+            object_id=thread_id,
             context={
                 "post_id": post_id,
+                "thread_id": thread_id,
             },
             protected=True,
         )

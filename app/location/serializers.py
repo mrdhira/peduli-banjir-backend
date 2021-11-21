@@ -16,6 +16,16 @@ class LocationSerializer(serializers.ModelSerializer):
     postal_code = serializers.CharField()
     address = serializers.CharField()
 
-    class meta:
+    class Meta:
         model = Location
-        fields = "__all__"
+        fields = (
+            "country_code",
+            "country",
+            "state",
+            "city",
+            "city_district",
+            "village",
+            "residential",
+            "postal_code",
+            "address",
+        )

@@ -3,7 +3,9 @@ import pickle
 from django.db.models import Exists
 from rest_framework import serializers
 from app.utils.redis import redis_client as cache
-from .models import ForumPost, ForumPostPicture, ForumThread, ForumThreadLike, Status
+from app.user.serializers import ProfileSerializer
+from app.location.serializers import LocationSerializer
+from .models import ForumPost, ForumPostLike, ForumThread, ForumThreadLike, Status
 
 logger = logging.getLogger(__name__)
 
@@ -31,12 +33,14 @@ class ForumPostListQueryParamsSerializer(serializers.Serializer):
     page = serializers.IntegerField(default=0)
     limit = serializers.IntegerField(default=10)
     order_by = serializers.CharField(default="-created_at")
-    category = serializers.IntegerField()
-    latitude = serializers.FloatField()
-    longtitude = serializers.FloatField()
+    category = serializers.IntegerField(required=False)
+    latitude = serializers.FloatField(required=False)
+    longtitude = serializers.FloatField(required=False)
 
-    def validate_order_by(self, data):
-        if data != 1 or data != 2:
+    def validate_category(self, data):
+        if not data:
+            return data
+        elif data != 1 or data != 2:
             raise serializers.ValidationError("category only allowed with id 1 or 2")
         return data
 
@@ -60,6 +64,7 @@ class CreateForumThreadSerializer(serializers.Serializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     user_creator = serializers.SerializerMethodField()
     is_like = serializers.SerializerMethodField()
     content = serializers.CharField()
@@ -70,7 +75,7 @@ class ThreadSerializer(serializers.ModelSerializer):
     sub_threads = serializers.SerializerMethodField()
 
     def get_user_creator(self, obj):
-        return obj.user_creator
+        return ProfileSerializer(obj.user_creator).data
 
     def get_is_like(self, obj):
         try:
@@ -113,6 +118,7 @@ class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ForumThread
         fields = (
+            "id",
             "user_creator",
             "sub_threads",
             "is_like",
@@ -122,6 +128,12 @@ class ThreadSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         )
+
+
+class ForumThreadLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForumThreadLike
+        fields = "__all__"
 
 
 # class ForumPostPictureSerializer(serializers.ModelSerializer):
@@ -136,6 +148,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class ForumListSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     user_creator = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
     is_like = serializers.SerializerMethodField()
@@ -148,10 +161,10 @@ class ForumListSerializer(serializers.ModelSerializer):
     updated_at = serializers.DateTimeField()
 
     def get_user_creator(self, obj):
-        return obj.user_creator
+        return ProfileSerializer(obj.user_creator).data
 
     def get_location(self, obj):
-        return obj.location
+        return LocationSerializer(obj.location).data
 
     def get_is_like(self, obj):
         try:
@@ -163,6 +176,7 @@ class ForumListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ForumPost
         fields = (
+            "id",
             "user_creator",
             "location",
             "is_like",
@@ -177,6 +191,7 @@ class ForumListSerializer(serializers.ModelSerializer):
 
 
 class ForumDetailSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     user_creator = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
     is_like = serializers.SerializerMethodField()
@@ -192,10 +207,10 @@ class ForumDetailSerializer(serializers.ModelSerializer):
     threads = serializers.SerializerMethodField()
 
     def get_user_creator(self, obj):
-        return obj.user_creator
+        return ProfileSerializer(obj.user_creator).data
 
     def get_location(self, obj):
-        return obj.location
+        return LocationSerializer(obj.location).data
 
     def get_is_like(self, obj):
         try:
@@ -240,11 +255,12 @@ class ForumDetailSerializer(serializers.ModelSerializer):
             instance=thread,
             many=True,
             context={"user": user},
-        )
+        ).data
 
     class Meta:
         model = ForumPost
         fields = (
+            "id",
             "user_creator",
             "location",
             "is_like",
@@ -259,3 +275,9 @@ class ForumDetailSerializer(serializers.ModelSerializer):
             # "pictures",
             "threads",
         )
+
+
+class ForumPostLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForumPostLike
+        fields = "__all__"
