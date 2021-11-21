@@ -1,2 +1,5 @@
 # Code Quality
 pylint-django
+
+gunicorn
+django-storages

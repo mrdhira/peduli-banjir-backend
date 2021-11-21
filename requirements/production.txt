@@ -1,2 +1,2 @@
 gunicorn
-django-storages[google]
+django-storages

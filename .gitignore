@@ -2,7 +2,7 @@
 venv/
 
 # Credentials
-.env
+*.env
 
 # Log
 *.log

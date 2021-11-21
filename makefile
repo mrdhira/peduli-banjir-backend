@@ -13,6 +13,9 @@ makemigrations:
 migrate:
 	python manage.py migrate
 
+createsuperuser:
+	python manage.py createsuperuser
+
 collectstatic:
 	python manage.py collectstatic
 
