@@ -124,15 +124,15 @@ class ThreadSerializer(serializers.ModelSerializer):
         )
 
 
-class ForumPostPictureSerializer(serializers.ModelSerializer):
-    picture = serializers.SerializerMethodField()
+# class ForumPostPictureSerializer(serializers.ModelSerializer):
+#     picture = serializers.SerializerMethodField()
 
-    def get_picture(self, obj):
-        return obj.get_picture()
+#     def get_picture(self, obj):
+#         return obj.get_picture()
 
-    class Meta:
-        model = ForumPostPicture
-        fields = ("picture",)
+#     class Meta:
+#         model = ForumPostPicture
+#         fields = ("picture",)
 
 
 class ForumListSerializer(serializers.ModelSerializer):
@@ -162,7 +162,18 @@ class ForumListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ForumPost
-        fields = "__all__"
+        fields = (
+            "user_creator",
+            "location",
+            "is_like",
+            "title",
+            "category",
+            "total_like",
+            "total_comment",
+            "total_view",
+            "created_at",
+            "updated_at",
+        )
 
 
 class ForumDetailSerializer(serializers.ModelSerializer):
@@ -177,7 +188,7 @@ class ForumDetailSerializer(serializers.ModelSerializer):
     total_view = serializers.IntegerField()
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
-    pictures = serializers.SerializerMethodField
+    # pictures = serializers.SerializerMethodField
     threads = serializers.SerializerMethodField()
 
     def get_user_creator(self, obj):
@@ -193,11 +204,11 @@ class ForumDetailSerializer(serializers.ModelSerializer):
             logger.error("error when post serializer at get_is_like => {}".format(e))
             return False
 
-    def get_pictures(self, obj):
-        return ForumPostPictureSerializer(
-            instance=obj.forum_post_picture,
-            Many=True,
-        ).data
+    # def get_pictures(self, obj):
+    #     return ForumPostPictureSerializer(
+    #         instance=obj.forum_post_picture,
+    #         Many=True,
+    #     ).data
 
     def get_threads(self, obj):
         user = get_user(self.context)
@@ -245,6 +256,6 @@ class ForumDetailSerializer(serializers.ModelSerializer):
             "total_view",
             "created_at",
             "updated_at",
-            "pictures",
+            # "pictures",
             "threads",
         )

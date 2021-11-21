@@ -15,6 +15,8 @@ class Location(models.Model):
     residential = models.CharField(max_length=255, blank=True, null=True)
     postal_code = models.CharField(max_length=5, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     objects = LocationManager()
 
     def __str__(self) -> str:

@@ -39,7 +39,9 @@ class ForumPost(models.Model):
         choices=Status.choices,
         default=Status.ACTIVE,
     )
-    object = ForumPostManager()
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    objects = ForumPostManager()
 
     def __str__(self) -> str:
         return f"{self.user_creator.full_name} - {self.title}"
@@ -73,6 +75,8 @@ class ForumPostPicture(models.Model):
         choices=Status.choices,
         default=Status.ACTIVE,
     )
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def get_picture(self):
         if self.picture:
@@ -111,7 +115,9 @@ class ForumThread(models.Model):
         choices=Status.choices,
         default=Status.ACTIVE,
     )
-    object = ForumThreadManager()
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    objects = ForumThreadManager()
 
     class Meta:
         db_table = "forum_thread"

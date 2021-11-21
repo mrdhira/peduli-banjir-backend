@@ -39,7 +39,8 @@ class User(AbstractUser):
         null=True,
     )
     google_id = models.CharField(max_length=255, blank=True, null=True)
-
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     objects = UserCustomManager()
 
     def __str__(self):

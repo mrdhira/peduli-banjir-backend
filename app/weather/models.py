@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from app.location.models import Location
 from app.weather.managers import WeatherCurrentManager, WeatherForecastManager
@@ -8,6 +9,8 @@ class WeatherDesc(models.Model):
     main = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     icon = models.CharField(max_length=15)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.main
@@ -103,6 +106,8 @@ class WeatherCurrent(models.Model):
         blank=True,
         null=True,
     )  # Atmospheric pressure on the ground level, hPa
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     objects = WeatherCurrentManager()
 
     class Meta:
@@ -264,6 +269,8 @@ class WeatherForecast(models.Model):
         blank=True,
         null=True,
     )
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     objects = WeatherForecastManager()
 
     def __str__(self) -> str:
