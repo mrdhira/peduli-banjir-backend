@@ -36,8 +36,8 @@ class Alert(models.Model):
         blank=True,
         null=True,
     )
-    is_user_report = models.BooleanField()
-    is_system_report = models.BooleanField()
+    is_user_report = models.BooleanField(default=False)
+    is_system_report = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     objects = AlertManager()

@@ -12,21 +12,27 @@ class AlertManager(Manager):
         return self.all()
 
     def get_alert_by_latlong(self, fields):
+        from .models import Alert
+
         latitude = fields.get("latitude")
         longtitude = fields.get("longtitude")
 
         location = Location.objects.get_location(latitude, longtitude)
 
-        from .models import Alert
-
         alert = self.filter(
-            Q(status=Alert.AlertStatus.WARNING) or Q(status=Alert.AlertStatus.DANGER),
+            Q(flood_status=Alert.FloodStatus.WARNING)
+            or Q(flood_status=Alert.FloodStatus.DANGER),
+            status=Alert.AlertStatus.REPORTED,
             location=location,
-        ).all()
+        )
+
+        print(alert.all())
 
         return alert
 
     def get_alert_by_latlong_city_district_group(self, fields):
+        from .models import Alert
+
         latitude = fields.get("latitude")
         longtitude = fields.get("longtitude")
 
@@ -63,3 +69,13 @@ class AlertManager(Manager):
         RADIUS = 500
 
         return
+
+    def crete_alert(self, user, location):
+        from .models import Alert
+
+        return self.create(
+            user_report=user,
+            location=location,
+            flood_status=Alert.FloodStatus.WARNING,
+            is_user_report=True,
+        )

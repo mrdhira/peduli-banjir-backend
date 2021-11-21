@@ -7,6 +7,11 @@ from .models import Alert
 logger = logging.getLogger(__name__)
 
 
+class AlertByLatlongSerializer(serializers.Serializer):
+    latitude = serializers.FloatField(required=True)
+    longtitude = serializers.FloatField(required=True)
+
+
 class AlertSerializer(serializers.ModelSerializer):
     user_report = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
@@ -22,6 +27,14 @@ class AlertSerializer(serializers.ModelSerializer):
     def get_location(self, obj):
         return LocationSerializer(obj.location).data
 
-    class meta:
+    class Meta:
         model = Alert
-        fields = "__all__"
+        fields = (
+            "user_report",
+            "location",
+            "status",
+            "flood_status",
+            "flood_depth",
+            "is_user_report",
+            "is_system_report",
+        )

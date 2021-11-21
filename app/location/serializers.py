@@ -6,6 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     country_code = serializers.CharField()
     country = serializers.CharField()
     state = serializers.CharField()
@@ -19,6 +20,7 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = (
+            "id",
             "country_code",
             "country",
             "state",

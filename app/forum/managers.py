@@ -68,6 +68,8 @@ class ForumPostManager(Manager):
         return post
 
     def create_post(self, fields):
+        from .models import ForumPost
+
         user = fields.get("user")
         latitude = fields.get("latitude")
         longtitude = fields.get("longtitude")
@@ -87,6 +89,11 @@ class ForumPostManager(Manager):
             )
 
             # TODO: Insert picture to forum_post_picture
+
+            if category == ForumPost.ForumPostCategory.REPORT:
+                from app.alert.models import Alert
+
+                Alert.objects.crete_alert(user, location)
 
             return post
 
