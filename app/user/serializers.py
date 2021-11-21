@@ -58,6 +58,7 @@ class LoginResponseSerializer(serializers.Serializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     username = serializers.CharField()
     full_name = serializers.CharField()
     email = serializers.CharField()
@@ -71,6 +72,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            "id",
             "username",
             "full_name",
             "email",
