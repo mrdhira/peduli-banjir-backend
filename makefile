@@ -13,6 +13,9 @@ makemigrations:
 migrate:
 	python manage.py migrate
 
+collectstatic:
+	python manage.py collectstatic
+
 start:
 	gunicorn config.wsgi --bind=0.0.0.0:8000 --workers=2 --threads=2 --worker-class=gthread --log-level=debug --worker-tmp-dir=/dev/shm --chdir=/app
 
