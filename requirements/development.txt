@@ -2,4 +2,5 @@
 pylint-django
 
 gunicorn
+boto3
 django-storages

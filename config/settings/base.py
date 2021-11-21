@@ -36,7 +36,7 @@ ALLOWED_HOSTS = env.list(
 )
 
 AUTH_USER_MODEL = "user.User"
-ADMIN_URL = env.string("DJANGO_ADMIN_URL", "admin")
+ADMIN_URL = env.str("DJANGO_ADMIN_URL", "admin")
 
 # Application definition
 
