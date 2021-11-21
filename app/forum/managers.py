@@ -93,7 +93,7 @@ class ForumPostManager(Manager):
             if category == ForumPost.ForumPostCategory.REPORT:
                 from app.alert.models import Alert
 
-                Alert.objects.crete_alert(user, location)
+                Alert.objects.crete_alert(user, location, latitude, longtitude)
 
             return post
 

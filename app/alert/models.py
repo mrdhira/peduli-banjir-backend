@@ -24,6 +24,14 @@ class Alert(models.Model):
     location = models.ForeignKey(
         Location, on_delete=models.CASCADE, related_name="location_lat_long_mapping"
     )
+    latitude = models.FloatField(
+        blank=True,
+        null=True,
+    )
+    longtitude = models.FloatField(
+        blank=True,
+        null=True,
+    )
     status = models.IntegerField(
         choices=AlertStatus.choices,
         default=AlertStatus.REPORTED,

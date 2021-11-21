@@ -76,12 +76,14 @@ class AlertManager(Manager):
 
         return
 
-    def crete_alert(self, user, location):
+    def crete_alert(self, user, location, latitude, longtitude):
         from .models import Alert
 
         return self.create(
             user_report=user,
             location=location,
+            latitude=latitude,
+            longtitude=longtitude,
             flood_status=Alert.FloodStatus.WARNING,
             is_user_report=True,
         )

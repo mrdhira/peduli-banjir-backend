@@ -15,6 +15,8 @@ class AlertByLatlongSerializer(serializers.Serializer):
 class AlertSerializer(serializers.ModelSerializer):
     user_report = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
+    latitude = serializers.FloatField()
+    longtitude = serializers.FloatField()
     status = serializers.IntegerField()
     flood_status = serializers.IntegerField()
     flood_depth = serializers.FloatField()
@@ -32,6 +34,8 @@ class AlertSerializer(serializers.ModelSerializer):
         fields = (
             "user_report",
             "location",
+            "latitude",
+            "longtitude",
             "status",
             "flood_status",
             "flood_depth",
