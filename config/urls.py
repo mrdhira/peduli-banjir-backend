@@ -18,8 +18,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+ADMIN_URL = settings.ADMIN_URL
+
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path(f"{ADMIN_URL}/", admin.site.urls),
     # Your app modules
     path("user/", include("app.user.urls", namespace="user")),
     path("forum/", include("app.forum.urls", namespace="forum")),

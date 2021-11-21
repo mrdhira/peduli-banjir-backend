@@ -23,7 +23,7 @@ APPS_DIR = ROOT_DIR / "app"
 env = environ.Env()
 env.read_env(str(ROOT_DIR / ".env"))
 
-ENV = env.str("ENV", "deve;lopment")
+ENV = env.str("ENV", "development")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -36,6 +36,7 @@ ALLOWED_HOSTS = env.list(
 )
 
 AUTH_USER_MODEL = "user.User"
+ADMIN_URL = env.string("DJANGO_ADMIN_URL", "admin")
 
 # Application definition
 
