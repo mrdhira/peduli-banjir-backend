@@ -71,6 +71,7 @@ class ForumPostLikeView(APIView):
         return generic_post(
             request=request,
             create_method=ForumPost.objects.action_like,
+            empty_body=True,
             request_serializer=PassSerializer,
             response_serializer=PassSerializer,
             context={
@@ -105,6 +106,7 @@ class ForumThreadLikeView(APIView):
         return generic_post(
             request=request,
             create_method=ForumThread.objects.action_like,
+            empty_body=True,
             request_serializer=PassSerializer,
             response_serializer=PassSerializer,
             context={

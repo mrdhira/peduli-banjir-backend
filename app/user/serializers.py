@@ -1,18 +1,60 @@
-from django.db import models
+import logging
 from rest_framework import serializers
+from rest_framework_jwt.settings import api_settings
 from .models import User
+
+logger = logging.getLogger(__name__)
+
+
+def jwt_token_generate(user):
+    jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+    jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+    payload = jwt_payload_handler(user)
+    payload["roles"] = list(user.groups.values_list("name", flat=True))
+
+    token = jwt_encode_handler(payload)
+    return token
+
+
+class PassSerializer:
+    def __init__(self, data, *args, **kwargs):
+        self.data = data
+
+    def is_valid(self):
+        return True
 
 
 class GoogleOauth2Serializer(serializers.Serializer):
-    id = serializers.CharField(source="result.sub")
-    email = serializers.CharField(source="result.email")
-    name = serializers.CharField(source="result.name")
-    picture = serializers.CharField(source="result.picture")
+    sub = serializers.CharField()
+    email = serializers.CharField()
+    name = serializers.CharField()
+    picture = serializers.CharField()
 
 
-class TokenSerializer(serializers.Serializer):
-    username = serializers.CharField(source="user.username")
-    email = serializers.CharField(source="user.email")
+class LoginRequestSerializer(serializers.Serializer):
+    access_token = serializers.CharField(required=True)
+
+
+class LoginResponseSerializer(serializers.Serializer):
+    user = serializers.SerializerMethodField()
+    exp = serializers.SerializerMethodField()
+    token = serializers.SerializerMethodField()
+
+    def get_user(self, obj):
+        return ProfileSerializer(obj).data
+
+    def get_token(self, obj):
+        token = jwt_token_generate(obj)
+        return token
+
+    def get_exp(self, obj):
+        token = self.get_token(obj)
+        token_info = api_settings.JWT_DECODE_HANDLER(token)
+
+        logger.info("token info", token_info)
+
+        return token_info.get("exp")
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -27,5 +69,16 @@ class ProfileSerializer(serializers.ModelSerializer):
         return obj.display_picture.url
 
     class Meta:
-        models = User
-        fields = "__all__"
+        model = User
+        fields = (
+            "username",
+            "full_name",
+            "email",
+            "phone_number",
+            "gender",
+            "display_picture",
+        )
+
+
+class GenerateTokenSerializer(serializers.Serializer):
+    email = serializers.CharField(required=True)

@@ -23,19 +23,22 @@ class User(AbstractUser):
     phone_number = models.CharField(
         _("Phone number of user"),
         max_length=20,
-        unique=True,
+        blank=True,
+        null=True,
     )
     gender = models.CharField(
         _("Gender of user"),
         max_length=1,
         choices=GENDER.choices,
-        default=GENDER.MALE,
+        blank=True,
+        null=True,
     )
     display_picture = models.ImageField(
         upload_to="display_picture/",
         blank=True,
         null=True,
     )
+    google_id = models.CharField(max_length=255, blank=True, null=True)
 
     objects = UserCustomManager()
 

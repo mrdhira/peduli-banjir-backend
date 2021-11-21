@@ -161,10 +161,7 @@ def generic_post(
         created_instance = create_method(**kwargs)
 
     except ObjectDoesNotExist as error:
-        default_not_found_error_message = (
-            "Collection not found" if many else "Detail not found"
-        )
-
+        default_not_found_error_message = "Detail not found"
         return Response(
             {
                 "status": status.HTTP_404_NOT_FOUND,

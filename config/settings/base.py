@@ -189,7 +189,6 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
     ),
-    "EXCEPTION_HANDLER": "rollbar.contrib.django_rest_framework.post_exception_handler",
 }
 
 # CACHES
@@ -207,3 +206,5 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 CACHE_TTL = int(env("REDIS_CACHE_TTL"))
+
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
