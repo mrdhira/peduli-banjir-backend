@@ -19,6 +19,10 @@ class AlertManager(Manager):
 
         location = Location.objects.get_location(latitude, longtitude)
 
+        print("===========")
+        print(location)
+        print("===========")
+
         alert = self.filter(
             Q(flood_status=Alert.FloodStatus.WARNING)
             or Q(flood_status=Alert.FloodStatus.DANGER),
@@ -26,7 +30,9 @@ class AlertManager(Manager):
             location=location,
         )
 
+        print("===========")
         print(alert.all())
+        print("===========")
 
         return alert
 

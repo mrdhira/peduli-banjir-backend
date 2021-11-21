@@ -14,6 +14,7 @@ class AlertByLatlongView(APIView):
             model_method=Alert.objects.get_alert_by_latlong,
             request_serializer=AlertByLatlongSerializer,
             response_serializer=AlertSerializer,
+            many=True,
             protected=True,
         )
 
